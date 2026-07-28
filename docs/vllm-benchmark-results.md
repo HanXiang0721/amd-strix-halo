@@ -132,25 +132,73 @@ KV cache 容量: 309,952 tokens
 | 8,192 tokens | 37 | 中等对话 |
 | 4,096 tokens | 75 | 短对话/代码 |
 
+## Batch Size 对比测试
+
+使用相同的 agentic_coding 数据集 (20 个对话, 2014 轮次)，分别测试 `--max-num-seqs 4` 和 `--max-num-seqs 16`：
+
+### LLM 性能对比
+
+| 指标 | batch=4 | batch=16 | 变化 |
+|------|---------|----------|------|
+| 首 Token 延迟 (TTFT) | 1,184 ms | 7,112 ms | 6.0x 慢 |
+| Token 间延迟 (ITL) | 152 ms | 254 ms | 1.7x 慢 |
+| 请求延迟 | 16,162 ms | 33,275 ms | 2.1x 慢 |
+| 每用户吞吐量 | 6.60 tok/s | 3.31 tok/s | 0.5x |
+| **总吞吐量** | **23.35 tok/s** | **41.80 tok/s** | **1.8x 快** |
+| 请求吞吐量 | 0.23 req/s | 0.41 req/s | 1.8x 快 |
+| 测试时长 | 85.62 s | 49.21 s | 0.6x |
+
+### GPU 遥测对比
+
+| 指标 | batch=4 | batch=16 |
+|------|---------|----------|
+| GPU 功耗 (平均) | 91.9 W | 101.0 W |
+| GPU 功耗 (最大) | 129 W | 146 W |
+| GPU 利用率 (平均) | 98.5% | 97.3% |
+| 显存使用 | 94.84 GB | 94.95 GB |
+
+### Batch Size 16 详细结果
+
+| 指标 | 平均值 | p50 | p90 | p99 | 最大 |
+|------|--------|-----|-----|-----|------|
+| 首 Token 延迟 (TTFT) | 7,112 ms | 8,434 ms | 12,069 ms | 12,838 ms | 13,019 ms |
+| Token 间延迟 (ITL) | 254 ms | 244 ms | 306 ms | 369 ms | 376 ms |
+| 请求延迟 | 33,275 ms | 36,907 ms | 42,636 ms | 46,457 ms | 47,181 ms |
+| 每用户吞吐量 | 3.31 tok/s | 2.90 tok/s | 5.29 tok/s | - | 5.40 tok/s |
+| 总吞吐量 | 41.80 tok/s | - | - | - | - |
+| 输出长度 | 52.35 tokens | - | - | - | - |
+
+### 分析
+
+- **总吞吐量提升 1.8 倍**：batch=16 时 41.80 tok/s vs batch=4 时 23.35 tok/s
+- **每用户速度下降一半**：batch=16 时 3.31 tok/s vs batch=4 时 6.60 tok/s
+- **TTFT 大幅增加**：batch=16 时 7.1s vs batch=4 时 1.2s，高并发下 prefill 排队严重
+- **GPU 利用率接近饱和**：两种配置都在 97-98%，说明 GPU 已是瓶颈
+- **功耗增加**：batch=16 平均 101W，最高 146W（vs batch=4 的 92W/129W）
+- **最佳权衡**：Agent 场景推荐 batch=4-8（兼顾延迟和吞吐），纯吞吐压测推荐 batch=16
+
 ## 结论
 
 1. **BF16 是 gfx1151 上的最优推理路径**——rocBLAS 有专属调优内核，带宽效率 84%
 2. **MoE 模型比 Dense 模型快 4 倍**——Qwen3-30B-A3B 仅激活 3B 参数，每 token 读取量减少 10 倍
-3. **并发 4 路时总吞吐量 23.35 tok/s**，GPU 利用率 98.5%
+3. **并发 4 路时总吞吐量 23.35 tok/s，16 路时 41.80 tok/s**，GPU 利用率均接近 100%
 4. **所有低精度量化路径在 gfx1151 上均不可用**（FP8/INT4/AWQ/GPTQ），原因是 RDNA 3.5 缺乏对应矩阵核心
 5. vLLM 的 MoE Triton 内核未为 Radeon 8060S 调优，实际性能约为理论值的 55-70%
+6. **Agent 场景推荐 max-num-seqs=4-8**，纯吞吐压测可用 16
 
 ## 结果文件
 
 | 文件 | 说明 |
 |------|------|
-| `profile_export_aiperf.csv` | LLM 性能指标 CSV |
-| `profile_export_aiperf.json` | LLM 性能指标 JSON |
-| `gpu_telemetry_export.jsonl` | GPU 遥测时序数据 |
-| `server_metrics_export.csv` | vLLM 服务端指标 |
+| `results/profile_export_aiperf.csv` | batch=4 LLM 性能指标 CSV |
+| `results/profile_export_aiperf.json` | batch=4 LLM 性能指标 JSON |
+| `results/gpu_telemetry_export.jsonl` | batch=4 GPU 遥测时序数据 |
+| `results_batch16/profile_export_aiperf.csv` | batch=16 LLM 性能指标 CSV |
+| `results_batch16/profile_export_aiperf.json` | batch=16 LLM 性能指标 JSON |
+| `results_batch16/gpu_telemetry_export.jsonl` | batch=16 GPU 遥测时序数据 |
 
 ---
 
-*测试日期: 2026-07-27*
+*测试日期: 2026-07-28*
 *硬件: AMD Ryzen AI MAX+ 395 / Strix Halo*
 *软件: ROCm 7.14.0 + vLLM 0.23.1 + AIPerf 0.11.0*
