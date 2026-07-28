@@ -167,6 +167,83 @@ KV cache 容量: 309,952 tokens
 | 高并发 API 服务 | 24-32 | 总吞吐 60-69 tok/s，TTFT 波动大 |
 | 纯压测 | 32 | 最大总吞吐 69.2 tok/s |
 
+## vLLM 运行时 Profiling (concurrency=8)
+
+使用 agentic_coding 数据集，concurrency=8，每秒采集 vLLM `/metrics` 端点的运行时指标。
+
+### 运行时 Batch Size 分布
+
+| Batch Size | 采样次数 | 占比 | 说明 |
+|-----------|---------|------|------|
+| 0 | 11 | 13.6% | 空闲（请求未到达/已全部完成） |
+| 1 | 11 | 13.6% | 收尾阶段（请求陆续完成） |
+| 4 | 3 | 3.7% | 过渡阶段 |
+| 7 | 5 | 6.2% | 个别请求完成，batch 缩减 |
+| **8** | **46** | **56.8%** | **满载运行（主要阶段）** |
+
+### Batch Size 时间序列
+
+```
+时间(s)  Batch  KV Cache%  趋势
+-------- ------ ---------- --------
+  0-7       0       0.00%            ← 等待请求到达 (AIPerf tokenizer 初始化)
+  8         8       4.58%  ########  ← 8 个请求同时到达，全部调度
+ 8-27       8      4.6-4.9%  ########  ← 稳定满载 decode
+   27       7       4.35%  #######   ← 1 个请求完成，batch 缩减
+   29       8       4.97%  ########  ← 新请求插入 (continuous batching)
+29-55       8      5.0-5.6%  ########  ← 持续满载，KV cache 缓慢增长
+  56        7       5.07%  #######   ← 请求开始陆续完成
+  59        6       4.42%  ######
+  61        5       3.82%  #####
+  62        4       3.33%  ####      ← batch 逐步缩减
+  65        3       2.62%  ###
+  66        2       2.09%  ##
+  67        1       1.42%  #         ← 最后 1 个请求
+  78        0       0.00%            ← 全部完成
+```
+
+### 关键运行时指标
+
+| 指标 | 值 | 说明 |
+|------|---|------|
+| 采样时长 | 80.5 秒 | |
+| 采样数 | 81 | 每秒 1 次 |
+| 首个请求开始 | t=8.1s | AIPerf tokenizer 初始化耗时 ~8s |
+| Batch 达到 8 | t=8.1s | 8 个请求同时调度 |
+| KV Cache 峰值 | 5.55% (t=55.4s) | 远未饱和（容量 309,952 tokens） |
+| 等待队列 | 始终为 0 | 无排队，所有请求即时调度 |
+| 抢占次数 | 0 | 无 preemption |
+| 总生成 tokens | 2,360 | 80.5s 内 |
+| 平均吞吐 | 29.3 tok/s | 与 AIPerf 报告的 32.0 tok/s 接近 |
+
+### Continuous Batching 行为分析
+
+```
+请求到达:    t=8s  8个请求同时到达
+              ↓
+Prefill 阶段: t=8s  batch=8, KV cache 跳至 4.58%
+              ↓
+Decode 阶段:  t=8-27s  batch=8 稳定, KV cache 缓慢增长 (4.6%→4.9%)
+              ↓
+请求完成:     t=27s  1个请求完成, batch=7
+              ↓
+新请求插入:   t=29s  continuous batching 插入新请求, batch 恢复到 8
+              ↓
+持续 decode:  t=29-55s  batch=8, KV cache 增长至 5.55%
+              ↓
+收尾阶段:     t=56-77s  请求陆续完成, batch 8→7→6→5→4→3→2→1
+              ↓
+完成:         t=78s  所有请求完成
+```
+
+### 关键发现
+
+1. **vLLM continuous batching 有效工作**：请求完成后的空位立即被新请求填补（t=29s 可见）
+2. **KV Cache 使用率极低**：峰值仅 5.55%，说明 28.38 GiB KV cache 对 8 并发绰绰有余
+3. **无排队无抢占**：等待队列始终为 0，说明 GPU 算力足以支撑 8 并发
+4. **Batch Size 稳定**：56.8% 的时间保持 batch=8 满载运行
+5. **Token 生成速率均匀**：每秒约生成 29-32 tokens，波动小
+
 ## 结论
 
 1. **BF16 是 gfx1151 上的最优推理路径**——rocBLAS 有专属调优内核，带宽效率 84%
@@ -176,20 +253,17 @@ KV cache 容量: 309,952 tokens
 5. **所有低精度量化路径在 gfx1151 上均不可用**（FP8/INT4/AWQ/GPTQ），原因是 RDNA 3.5 缺乏对应矩阵核心
 6. vLLM 的 MoE Triton 内核未为 Radeon 8060S 调优，实际性能约为理论值的 55-70%
 7. **Agent 场景推荐 batch=4-8**（兼顾延迟和吞吐），高并发 API 推荐 batch=24-32
+8. **vLLM continuous batching 有效工作**：KV cache 峰值仅 5.55%，无排队无抢占，batch size 稳定
 
 ## 结果文件
 
 | 文件 | 说明 |
 |------|------|
-| `results_batch1/` | batch=1 测试结果 |
-| `results_batch4/` | batch=4 测试结果 |
-| `results_batch8/` | batch=8 测试结果 |
-| `results_batch12/` | batch=12 测试结果 |
-| `results_batch16/` | batch=16 测试结果 |
-| `results_batch24/` | batch=24 测试结果 |
-| `results_batch32/` | batch=32 测试结果 |
+| `results_batch1/` ~ `results_batch32/` | batch size 1-32 的 AIPerf 测试结果 |
+| `metrics_batch8.csv` | concurrency=8 的 vLLM 运行时时序数据（每秒采样） |
+| `results_batch8_profile/` | concurrency=8 profiling 测试的 AIPerf 完整结果 |
 
-每个目录包含：`profile_export_aiperf.csv/json`（LLM 指标）、`gpu_telemetry_export.jsonl`（GPU 遥测）、`server_metrics_export.csv/json`（服务端指标）
+每个 `results_batch*/` 目录包含：`profile_export_aiperf.csv/json`（LLM 指标）、`gpu_telemetry_export.jsonl`（GPU 遥测）、`server_metrics_export.csv/json`（服务端指标）
 
 ---
 
