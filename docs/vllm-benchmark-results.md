@@ -134,68 +134,62 @@ KV cache 容量: 309,952 tokens
 
 ## Batch Size 对比测试
 
-使用相同的 agentic_coding 数据集 (20 个对话, 2014 轮次)，分别测试 `--max-num-seqs 4` 和 `--max-num-seqs 16`：
+使用相同的 agentic_coding 数据集 (20 个对话, 2014 轮次)，vLLM 设 `--max-num-seqs 32`，通过 AIPerf `--concurrency` 参数测试不同并发数 (1/4/8/12/16/24/32)。
 
-### LLM 性能对比
+### 完整性能对比
 
-| 指标 | batch=4 | batch=16 | 变化 |
-|------|---------|----------|------|
-| 首 Token 延迟 (TTFT) | 1,184 ms | 7,112 ms | 6.0x 慢 |
-| Token 间延迟 (ITL) | 152 ms | 254 ms | 1.7x 慢 |
-| 请求延迟 | 16,162 ms | 33,275 ms | 2.1x 慢 |
-| 每用户吞吐量 | 6.60 tok/s | 3.31 tok/s | 0.5x |
-| **总吞吐量** | **23.35 tok/s** | **41.80 tok/s** | **1.8x 快** |
-| 请求吞吐量 | 0.23 req/s | 0.41 req/s | 1.8x 快 |
-| 测试时长 | 85.62 s | 49.21 s | 0.6x |
+| Batch | 总吞吐 (tok/s) | 每用户 (tok/s) | TTFT (ms) | ITL (ms) | 请求延迟 (ms) | GPU利用率 (%) | 功耗 (W) |
+|-------|---------------|---------------|----------|---------|-------------|-------------|---------|
+| 1 | 12.8 | 12.7 | 796 | 70 | 8,011 | 98.2 | 87.9 |
+| 4 | 23.4 | 6.3 | 1,057 | 152 | 17,416 | 98.4 | 90.9 |
+| 8 | 32.0 | 4.9 | 2,479 | 191 | 26,079 | 98.1 | 90.9 |
+| 12 | 44.2 | 4.3 | 2,890 | 209 | 26,684 | 97.1 | 92.4 |
+| 16 | 44.7 | 3.6 | 7,935 | 222 | 32,084 | 96.9 | 99.6 |
+| 24 | 59.7 | 3.4 | 7,860 | 220 | 31,355 | 95.9 | 89.1 |
+| 32 | 69.2 | 4.4 | 907 | 219 | 24,821 | 95.4 | 79.1 |
 
-### GPU 遥测对比
+### 趋势分析
 
-| 指标 | batch=4 | batch=16 |
-|------|---------|----------|
-| GPU 功耗 (平均) | 91.9 W | 101.0 W |
-| GPU 功耗 (最大) | 129 W | 146 W |
-| GPU 利用率 (平均) | 98.5% | 97.3% |
-| 显存使用 | 94.84 GB | 94.95 GB |
+- **总吞吐量随并发线性增长**：从 batch=1 的 12.8 tok/s 到 batch=32 的 69.2 tok/s，增长 5.4 倍
+- **每用户速度递减**：batch=1 时 12.7 tok/s，batch=24 时降至 3.4 tok/s，batch=32 回升至 4.4 tok/s（调度优化）
+- **TTFT 在 batch=16/24 时剧增**：prefill 排队严重，达 7-8 秒；batch=32 时因 continuous batching 优化反而降至 907ms
+- **ITL 趋于稳定**：batch>=8 后 ITL 稳定在 190-220ms，说明 decode 阶段 GPU 时间分摊均衡
+- **GPU 利用率始终 >95%**：所有并发下 GPU 都是瓶颈，无空闲
+- **功耗稳定**：87-100W 范围，batch=16 峰值 99.6W
 
-### Batch Size 16 详细结果
+### 场景推荐
 
-| 指标 | 平均值 | p50 | p90 | p99 | 最大 |
-|------|--------|-----|-----|-----|------|
-| 首 Token 延迟 (TTFT) | 7,112 ms | 8,434 ms | 12,069 ms | 12,838 ms | 13,019 ms |
-| Token 间延迟 (ITL) | 254 ms | 244 ms | 306 ms | 369 ms | 376 ms |
-| 请求延迟 | 33,275 ms | 36,907 ms | 42,636 ms | 46,457 ms | 47,181 ms |
-| 每用户吞吐量 | 3.31 tok/s | 2.90 tok/s | 5.29 tok/s | - | 5.40 tok/s |
-| 总吞吐量 | 41.80 tok/s | - | - | - | - |
-| 输出长度 | 52.35 tokens | - | - | - | - |
-
-### 分析
-
-- **总吞吐量提升 1.8 倍**：batch=16 时 41.80 tok/s vs batch=4 时 23.35 tok/s
-- **每用户速度下降一半**：batch=16 时 3.31 tok/s vs batch=4 时 6.60 tok/s
-- **TTFT 大幅增加**：batch=16 时 7.1s vs batch=4 时 1.2s，高并发下 prefill 排队严重
-- **GPU 利用率接近饱和**：两种配置都在 97-98%，说明 GPU 已是瓶颈
-- **功耗增加**：batch=16 平均 101W，最高 146W（vs batch=4 的 92W/129W）
-- **最佳权衡**：Agent 场景推荐 batch=4-8（兼顾延迟和吞吐），纯吞吐压测推荐 batch=16
+| 场景 | 推荐 batch size | 理由 |
+|------|----------------|------|
+| 单用户交互 (Agent) | 1 | TTFT 0.8s，每用户 12.7 tok/s，体验最佳 |
+| 多用户 Agent (延迟敏感) | 4-8 | TTFT 1-2.5s，每用户 5-6 tok/s |
+| 多用户 Agent (吞吐优先) | 12 | 总吞吐 44 tok/s，TTFT 2.9s 可接受 |
+| 高并发 API 服务 | 24-32 | 总吞吐 60-69 tok/s，TTFT 波动大 |
+| 纯压测 | 32 | 最大总吞吐 69.2 tok/s |
 
 ## 结论
 
 1. **BF16 是 gfx1151 上的最优推理路径**——rocBLAS 有专属调优内核，带宽效率 84%
 2. **MoE 模型比 Dense 模型快 4 倍**——Qwen3-30B-A3B 仅激活 3B 参数，每 token 读取量减少 10 倍
-3. **并发 4 路时总吞吐量 23.35 tok/s，16 路时 41.80 tok/s**，GPU 利用率均接近 100%
-4. **所有低精度量化路径在 gfx1151 上均不可用**（FP8/INT4/AWQ/GPTQ），原因是 RDNA 3.5 缺乏对应矩阵核心
-5. vLLM 的 MoE Triton 内核未为 Radeon 8060S 调优，实际性能约为理论值的 55-70%
-6. **Agent 场景推荐 max-num-seqs=4-8**，纯吞吐压测可用 16
+3. **总吞吐量随并发增长**：batch=1 时 12.8 tok/s → batch=32 时 69.2 tok/s（5.4 倍提升）
+4. **GPU 利用率始终 >95%**，所有并发下 GPU 都是瓶颈
+5. **所有低精度量化路径在 gfx1151 上均不可用**（FP8/INT4/AWQ/GPTQ），原因是 RDNA 3.5 缺乏对应矩阵核心
+6. vLLM 的 MoE Triton 内核未为 Radeon 8060S 调优，实际性能约为理论值的 55-70%
+7. **Agent 场景推荐 batch=4-8**（兼顾延迟和吞吐），高并发 API 推荐 batch=24-32
 
 ## 结果文件
 
 | 文件 | 说明 |
 |------|------|
-| `results/profile_export_aiperf.csv` | batch=4 LLM 性能指标 CSV |
-| `results/profile_export_aiperf.json` | batch=4 LLM 性能指标 JSON |
-| `results/gpu_telemetry_export.jsonl` | batch=4 GPU 遥测时序数据 |
-| `results_batch16/profile_export_aiperf.csv` | batch=16 LLM 性能指标 CSV |
-| `results_batch16/profile_export_aiperf.json` | batch=16 LLM 性能指标 JSON |
-| `results_batch16/gpu_telemetry_export.jsonl` | batch=16 GPU 遥测时序数据 |
+| `results_batch1/` | batch=1 测试结果 |
+| `results_batch4/` | batch=4 测试结果 |
+| `results_batch8/` | batch=8 测试结果 |
+| `results_batch12/` | batch=12 测试结果 |
+| `results_batch16/` | batch=16 测试结果 |
+| `results_batch24/` | batch=24 测试结果 |
+| `results_batch32/` | batch=32 测试结果 |
+
+每个目录包含：`profile_export_aiperf.csv/json`（LLM 指标）、`gpu_telemetry_export.jsonl`（GPU 遥测）、`server_metrics_export.csv/json`（服务端指标）
 
 ---
 
