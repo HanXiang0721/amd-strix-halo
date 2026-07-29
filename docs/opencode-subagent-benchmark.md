@@ -12,7 +12,7 @@
 | 模型 | GLM-5.2（智谱云端 API） |
 | opencode | v1.18.4 |
 | 运行方式 | `opencode run`（非交互模式，不带 `--thinking`） |
-| 任务 | [Terminal-Bench-2](https://github.com/harbor-framework/terminal-bench-2): filter-js-from-html |
+| 任务 | [Terminal-Bench-2: filter-js-from-html](https://www.tbench.ai/benchmarks/terminal-bench-2/filter-js-from-html) |
 
 ## 输入提示词
 
