@@ -42,6 +42,8 @@ opencode run --model bailian/glm-5.2 --format=json --dangerously-skip-permission
 
 ## 执行过程对比
 
+![时间线对比图](opencode-timeline-comparison.png)
+
 ### Test A：完全串行
 
 ```
