@@ -1,0 +1,598 @@
+ROCm 7.14.0 compatibility matrix — AMD ROCm 7.14.0
+
+Skip to main content
+
+Back to top
+
+Ctrl+K
+
+Looking for an older ROCm release? See the ROCm release history.
+
+ROCm™ Core SDK 7.14.0
+
+Version List
+
+Core SDK
+
+AI Ecosystem
+
+GPU Systems and Infrastructure
+
+Toolkits
+
+AMD Data Science
+AMD Finance
+AMD Life Science
+AMD LLM Extension
+AMD Simulation
+
+Blogs
+
+Developer Hub
+
+AMD ROCm 7.14.0
+
+Release notes
+Transition guide
+What is ROCm?
+Compatibility matrix
+
+Install
+
+Install ROCm
+Prerequisites
+Installation
+Post-installation
+Uninstalling
+
+ROCm Runfile Installer
+Build ROCm from source
+
+Components
+
+ROCm Core SDK
+Math and compute libraries
+Composable Kernel
+hipBLAS
+hipBLASLt
+hipCUB
+hipFFT
+hipRAND
+hipSOLVER
+hipSPARSE
+hipSPARSELt
+MIOpen
+rocBLAS
+rocFFT
+rocPRIM
+rocRAND
+rocSOLVER
+rocSPARSE
+rocThrust
+rocWMMA
+
+Communication libraries
+RCCL
+rocSHMEM
+
+Media libraries
+rocDecode
+rocJPEG
+
+Storage libraries
+hipFile
+
+Runtime and compilers
+HIP
+HIPIFY
+LLVM
+
+Profiling and debugging tools
+ROCm Compute Profiler (rocprofiler-compute)
+ROCm Systems Profiler (rocprofiler-systems)
+ROCprofiler-SDK
+ROCdbgapi
+ROCm Debugger (ROCgdb)
+ROCr Debug Agent
+
+Control and monitoring tools
+AMD SMI
+ROCm Data Center Tool (RDC)
+rocminfo
+
+ROCm HPC-SDK
+Install HPC-SDK
+
+ROCm Extras
+ROCm Validation Suite (RVS)
+TransferBench
+
+AI ecosystem
+PyTorch
+JAX
+vLLM
+SGLang
+
+Tutorials
+
+AI Developer Hub
+ROCm examples
+
+Reference
+
+AMD GPU specifications
+AMD GPU architectures
+MI350 microarchitecture
+CDNA4 ISA reference
+CDNA4 white paper
+Instinct MI350 Series performance counters
+
+MI300 microarchitecture
+CDNA3 ISA reference
+CDNA3 white paper
+Instinct MI300 and MI200 Series performance counters
+
+MI250 microarchitecture
+CDNA2 ISA reference
+CDNA2 white paper
+
+MI100 microarchitecture
+CDNA1 ISA reference
+CDNA1 white paper
+
+AMD GPU system optimization
+AMD Instinct GPUs
+AMD MI355X
+AMD MI350X
+AMD MI325X
+AMD MI300X
+AMD MI300A
+AMD MI250 / MI250X
+AMD MI210
+AMD MI100
+
+AMD Radeon and Ryzen GPUs
+RDNA3.5
+RDNA2
+
+Common system settings
+GPU isolation techniques
+BAR access limits
+
+AMD GPU and ROCm components data types and precision support
+ROCm libraries graph-safe support
+AMD GPU atomics operation support
+ROCm environment variables
+Set the number of CUs
+
+AMD GPU programming on ROCm
+
+Contribute
+
+Contributing to the ROCm documentation
+ROCm documentation toolchain
+Building documentation
+
+Providing feedback about the ROCm documentation
+ROCm licenses
+
+ROCm 7.14.0...
+
+Repository
+
+Open issue
+
+.rst
+
+.pdf
+
+ROCm 7.14.0 compatibility matrix
+
+ Contents 
+
+System requirements and information
+ROCm Core SDK components
+AI ecosystem compatibility
+
+ROCm 7.14.0 compatibility matrix#
+
+                            2026-07-16
+                        
+
+                            11 min read time
+                        
+
+                        Applies to Linux and Windows
+                    
+
+To plan your ROCm 7.14.0 installation, use the following selector to
+view ROCm compatibility and system requirements information for your AMD
+hardware configuration and system environment. For installation instructions,
+see Install AMD ROCm 7.14.0.
+
+Device family
+
+AMD Instinct™
+AMD Radeon™
+AMD Ryzen™
+
+Instinct GPU
+
+AMD Instinct MI355X (gfx950)AMD Instinct MI350X (gfx950)AMD Instinct MI350P (gfx950)AMD Instinct MI325X (gfx942)AMD Instinct MI300X (gfx942)AMD Instinct MI300A (gfx942)AMD Instinct MI250X (gfx90a)AMD Instinct MI250 (gfx90a)AMD Instinct MI210 (gfx90a)AMD Instinct MI100 (gfx908)
+
+Radeon GPU
+
+AMD Radeon AI PRO R9700S (gfx1201)AMD Radeon AI PRO R9700 (gfx1201)AMD Radeon AI PRO R9600D (gfx1201)AMD Radeon RX 9070 XT (gfx1201)AMD Radeon RX 9070 GRE (gfx1201)AMD Radeon RX 9070 (gfx1201)AMD Radeon RX 9060 XT LP (gfx1200)AMD Radeon RX 9060 XT (gfx1200)AMD Radeon RX 9060 (gfx1200)AMD Radeon PRO W7900 Dual Slot (gfx1100)AMD Radeon PRO W7900 (gfx1100)AMD Radeon PRO W7800 48GB (gfx1100)AMD Radeon PRO W7800 (gfx1100)AMD Radeon RX 7900 XTX (gfx1100)AMD Radeon RX 7900 XT (gfx1100)AMD Radeon RX 7900 GRE (gfx1100)AMD Radeon PRO W7700 (gfx1101)AMD Radeon RX 7800 XT (gfx1101)AMD Radeon RX 7700 XT (gfx1101)AMD Radeon RX 7700 (gfx1101)AMD Radeon PRO V710 (gfx1101)AMD Radeon RX 7600 (gfx1102)AMD Radeon PRO W6800 (gfx1030)AMD Radeon PRO V620 (gfx1030)
+
+Ryzen APU
+
+AMD Ryzen AI Max+ PRO 495 (gfx1151)AMD Ryzen AI Max PRO 490 (gfx1151)AMD Ryzen AI Max PRO 485 (gfx1151)AMD Ryzen AI Max+ PRO 395 (gfx1151)AMD Ryzen AI Max PRO 390 (gfx1151)AMD Ryzen AI Max PRO 385 (gfx1151)AMD Ryzen AI Max PRO 380 (gfx1151)AMD Ryzen AI Max+ 395 (gfx1151)AMD Ryzen AI Max+ 392 (gfx1151)AMD Ryzen AI Max+ 388 (gfx1151)AMD Ryzen AI Max 390 (gfx1151)AMD Ryzen AI Max 385 (gfx1151)AMD Ryzen AI 9 HX PRO 475 (gfx1150)AMD Ryzen AI 9 HX PRO 470 (gfx1150)AMD Ryzen AI 9 PRO 465 (gfx1150)AMD Ryzen AI 7 PRO 450 (gfx1152)AMD Ryzen AI 5 PRO 440 (gfx1152)AMD Ryzen AI 5 PRO 435 (gfx1153)AMD Ryzen AI 9 HX 475 (gfx1150)AMD Ryzen AI 9 HX 470 (gfx1150)AMD Ryzen AI 9 465 (gfx1150)AMD Ryzen AI 7 450 (gfx1152)AMD Ryzen AI 9 HX PRO 375 (gfx1150)AMD Ryzen AI 9 HX PRO 370 (gfx1150)AMD Ryzen AI 7 PRO 350 (gfx1152)AMD Ryzen AI 5 PRO 340 (gfx1152)AMD Ryzen AI 9 HX 375 (gfx1150)AMD Ryzen AI 9 HX 370 (gfx1150)AMD Ryzen AI 9 365 (gfx1150)AMD Ryzen AI 7 350 (gfx1152)AMD Ryzen AI 7 345 (gfx1152)AMD Ryzen AI 5 435 (gfx1153)AMD Ryzen AI 5 430 (gfx1153)AMD Ryzen AI 7 445 (gfx1153)AMD Ryzen AI 5 340 (gfx1152)AMD Ryzen AI 5 330 (gfx1152)AMD Ryzen 7 PRO 250 (gfx1103)AMD Ryzen 5 PRO 230 (gfx1103)AMD Ryzen 5 PRO 220 (gfx1103)AMD Ryzen 5 PRO 215 (gfx1103)AMD Ryzen 3 PRO 210 (gfx1103)AMD Ryzen 9 270 (gfx1103)AMD Ryzen 7 260 (gfx1103)AMD Ryzen 7 250 (gfx1103)AMD Ryzen 5 240 (gfx1103)AMD Ryzen 5 230 (gfx1103)AMD Ryzen 5 220 (gfx1103)AMD Ryzen 3 210 (gfx1103)
+
+Linux distribution
+
+Ubuntu
+Debian
+RHEL
+Oracle Linux
+SLES
+
+Linux distribution
+
+Ubuntu
+Debian
+RHEL
+SLES
+
+Linux distribution
+
+Ubuntu
+Debian
+RHEL
+Oracle Linux
+Rocky Linux
+SLES
+
+Linux distribution
+
+Ubuntu
+Debian
+RHEL
+Rocky Linux
+SLES
+
+Linux distribution
+
+Ubuntu
+Debian
+RHEL
+SLES
+
+Linux distribution
+
+Ubuntu
+RHEL
+SLES
+
+Linux distribution
+
+Ubuntu
+RHEL
+SLES
+
+Operating system
+
+Ubuntu
+RHEL
+Windows
+WSL2
+
+Operating system
+
+Ubuntu
+RHEL
+Windows
+
+Operating system
+
+Ubuntu
+RHEL
+Windows
+WSL2
+
+Operating system
+
+Ubuntu
+RHEL
+Windows
+
+Operating system
+
+Ubuntu
+RHEL
+
+Operating system
+
+Ubuntu
+RHEL
+Windows
+WSL2
+
+Operating system
+
+Ubuntu
+RHEL
+Windows
+
+Operating system
+
+Ubuntu
+RHEL
+
+Operating system
+
+Ubuntu
+Windows
+WSL2
+
+Operating system
+
+Ubuntu
+Windows
+
+Operating system
+
+Ubuntu
+Debian
+RHEL
+Oracle Linux
+Rocky Linux
+SLES
+Windows
+
+Operating system
+
+Ubuntu
+RHEL
+Windows
+
+Operating system
+
+Ubuntu
+Windows
+
+Operating system
+
+Ubuntu
+RHEL
+Windows
+
+System requirements and information#
+ROCm depends on a coordinated stack of compatible firmware, driver, and user
+space components. Maintaining version alignment between these layers ensures
+expected GPU operation and performance, especially for AMD data center
+products. This table lists GPU details followed by supported operating systems,
+kernel driver, and firmware versions.
+AMD GPU seriesAMD Instinct MI350 Series
+AMD Instinct MI300 Series
+AMD Instinct MI200 Series
+AMD Instinct MI100 Series
+ArchitectureCDNA 4CDNA 3CDNA 2CDNALLVM targetgfx950gfx942gfx90agfx908Supported Ubuntu versionsUbuntu 26.04 (GA kernel: 7.0)
+Ubuntu 24.04.4 (GA kernel: 6.8)
+Ubuntu 22.04.5 (GA kernel: 5.15)
+Ubuntu 26.04 (GA kernel: 7.0)
+Ubuntu 24.04.4 (GA kernel: 6.8)
+Supported Red Hat Enterprise Linux versionsRHEL 10.2 (kernel: 6.12.0-211)
+RHEL 10.0 (kernel: 6.12.0-55)
+RHEL 9.8 (kernel: 5.14.0-687)
+RHEL 9.6 (kernel: 5.14.0-570)
+RHEL 9.4 (kernel: 5.14.0-427)
+RHEL 8.10 (kernel: 4.18.0-553)
+RHEL 10.2 (kernel: 6.12.0-211)
+RHEL 9.8 (kernel: 5.14.0-687)
+RHEL 9.6 (kernel: 5.14.0-570)
+RHEL 10.2 (kernel: 6.12.0-211)
+RHEL 10.0 (kernel: 6.12.0-55)
+RHEL 9.8 (kernel: 5.14.0-687)
+RHEL 9.6 (kernel: 5.14.0-570)
+RHEL 9.4 (kernel: 5.14.0-427)
+Supported Debian versionDebian 13 (kernel: 6.12)
+Debian 12 (kernel: 6.1.0)
+Debian 13 (kernel: 6.12)Debian 12 (kernel: 6.1.0)Supported Oracle Linux versionsOracle Linux 10 (kernel: UEK 8.1)
+Oracle Linux 9 (kernel: UEK 8)
+Oracle Linux 10 (kernel: UEK 8.1)
+Oracle Linux 9 (kernel: UEK 8)
+Oracle Linux 8 (kernel: UEK 7)
+Supported Rocky Linux versionsRocky Linux 9 (kernel: 5.14.0-570)
+Supported SUSE Linux Enterprise Server versionsSLES 16.0 (kernel: 6.12)
+SLES 15.7 (kernel: 6.4.0-150700.51)
+SLES 15.7 (kernel: 6.4.0-150700.51)
+Supported AMD GPU Driver (amdgpu) versions31.40.0
+31.30.0
+31.20.0
+31.10.0
+30.30.3
+30.30.2
+30.30.1
+30.30.0
+30.20.1
+30.20.0
+30.10.2
+30.10.1
+30.10.0
+Supported PLDM bundle (firmware) versions01.26.01.03 (or later)
+01.26.00.02
+BKC11.0 (IFWI PRD1000A) or later
+IFWI 00189938
+01.26.01.02 (or later)
+01.25.06.08
+01.26.00.04 (or later)
+01.25.06.05
+BKC 27 (or later)
+BKC 26.1
+Maintenance update (MU) 5 with IFWI 75 (or later)
+VBIOS D3430401-037
+AMD GPU seriesAMD Radeon AI PRO R9000 Series
+AMD Radeon PRO W7000 Series
+AMD Radeon PRO W6000 Series
+AMD Radeon PRO V Series
+AMD Radeon RX 9000 Series
+AMD Radeon RX 7000 Series
+ArchitectureRDNA 4RDNA 3RDNA 2LLVM targetgfx1201gfx1200gfx1100gfx1101gfx1102gfx1030Supported Ubuntu versionsUbuntu 26.04 (GA kernel: 7.0)
+Ubuntu 24.04.4 (GA kernel: 6.8)
+Ubuntu 22.04.5 (GA kernel: 5.15)
+Supported RHEL versionsRHEL 10.2 (kernel: 6.12.0-211)
+RHEL 9.8 (kernel: 5.14.0-687)
+Supported Windows versionWindows 11 25H2Supported AMD GPU Driver (amdgpu) versions31.40.0
+31.30.0
+31.20.0
+31.10.0
+30.30.3
+30.30.2
+30.30.1
+30.30.0
+30.20.1
+30.20.0
+30.10.2
+30.10.1
+30.10.0
+Supported Adrenalin Driver version26.6.4
+Supported Windows OEM Driver version26.10.28
+AMD APU seriesAMD Ryzen AI Max PRO 400 Series
+AMD Ryzen AI Max PRO 300 Series
+AMD Ryzen AI Max 300 Series
+AMD Ryzen AI PRO 400 Series
+AMD Ryzen AI PRO 400 Series
+AMD Ryzen AI 400 Series
+AMD Ryzen AI PRO 300 Series
+AMD Ryzen AI 300 Series
+AMD Ryzen PRO 200 Series
+AMD Ryzen 200 Series
+Graphics model (iGPU)Radeon 8065SRadeon 8060SRadeon 8050SRadeon 8040SRadeon 890MRadeon 880MRadeon 860MRadeon 840MRadeon 820MRadeon 780MRadeon 760MRadeon 740MArchitectureRDNA 3.5RDNA 3LLVM targetgfx1151gfx1150gfx1152gfx1153gfx1103Supported Ubuntu versions26.04 (GA kernel: 7.0)
+24.04.4 (HWE kernel: 6.17)
+Supported Windows versionWindows 11 25H2Supported kernel driver versionInbox kernel driver in supported Ubuntu versionSupported Adrenalin Driver version26.6.4
+Supported Windows OEM Driver version26.10.28
+For hardware specifications, see AMD GPU specifications.
+
+ROCm Core SDK components#
+The following table lists core components included in the ROCm 7.14.0
+release. Expect future releases in this stream to expand the list of
+components.
+Component groupComponent nameMath and compute librariesComposable Kernel 1.2.0
+hipBLAS 3.5.0
+hipBLASLt 1.4.1
+hipCUB 4.5.0
+hipFFT 1.0.24
+hipRAND 3.4.0
+hipSOLVER 3.5.0
+hipSPARSE 4.6.0
+hipSPARSELt 0.2.9
+MIOpen 3.5.2
+rocBLAS 5.5.0
+rocFFT 1.0.38
+rocPRIM 4.5.0
+rocRAND 4.5.0
+rocSOLVER 3.35.0
+rocSPARSE 4.7.0
+rocThrust 4.5.0
+rocWMMA 2.2.1
+Communication librariesCommunication librariesCommunication librariesRCCL 2.30.4
+rocSHMEM 3.5.0
+Media librariesMedia librariesrocDecode 1.8.0
+rocDecode 1.8.0
+rocJPEG 1.6.0
+rocJPEG 1.6.0
+Storage librarieshipFile 0.3.0
+Runtimes and compilersRuntimes and compilersHIP 7.14
+HIPIFY 7.14
+LLVM 23.0.0
+ROCr Runtime 1.21.0
+SPIRV-LLVM-Translator 23.0.0
+Profiling and debugging toolsProfiling and debugging toolsProfiling and debugging toolsROCm Compute Profiler (rocprofiler-compute) 3.7.0
+ROCprofiler-SDK 1.3.2
+ROCm Compute Profiler (rocprofiler-compute) 3.7.0
+ROCm Systems Profiler (rocprofiler-systems) 1.7.0
+ROCm Systems Profiler (rocprofiler-systems) 1.7.0
+ROCprofiler-SDK 1.3.2
+ROCprofiler-SDK 1.3.2
+ROCdbgapi 0.80.0
+ROCm Debugger (ROCgdb) 16.3
+ROCr Debug Agent 2.1.0
+Control and monitoring toolsAMD SMI 26.5.0
+rocminfo 1.0.0
+ROCm Data Center Tool (RDC) 1.3.1
+Component groupComponent nameMath and compute librariesComposable Kernel 1.2.0
+hipBLAS 3.5.0
+hipBLASLt 1.4.1
+hipCUB 4.5.0
+hipFFT 1.0.24
+hipRAND 3.4.0
+hipSOLVER 3.5.0
+hipSPARSE 4.6.0
+MIOpen 3.5.2
+rocBLAS 5.5.0
+rocFFT 1.0.38
+rocPRIM 4.5.0
+rocRAND 4.5.0
+rocSOLVER 3.35.0
+rocSPARSE 4.7.0
+rocThrust 4.5.0
+rocWMMA 2.2.1
+Support librariesROCm CMake
+Runtimes and compilersHIP 7.14
+HIPIFY 7.14
+LLVM 23.0.0
+SPIRV-LLVM-Translator 23.0.0
+Control and monitoring toolshipinfo
+
+GPU virtualization support#Supported SR-IOV configurations require the GPU-IOV Module (GIM) driver
+9.1.0.K – see the AMD Instinct Virtualization Driver documentation to
+get started.
+HypervisorVirtualization technologyVirtualization driverHost OSGuest OSKVMPassthrough—Ubuntu 24.04Ubuntu 24.04SR-IOVGIM 9.1.0.K
+Ubuntu 24.04Ubuntu 24.04RHEL 10.0RHEL 9.6ESXiSR-IOV—ESXi 9.1Ubuntu 24.04KVMPassthrough—Ubuntu 24.04Ubuntu 24.04SR-IOVGIM 9.1.0.K
+Ubuntu 24.04Ubuntu 24.04RHEL 9.6ESXiSR-IOV—ESXi 9.1Ubuntu 24.04KVMSR-IOVGIM 9.1.0.K
+Ubuntu 22.04Ubuntu 22.04KVMPassthrough—Ubuntu 22.04Ubuntu 22.04SR-IOVGIM 9.1.0.K
+Ubuntu 24.04Ubuntu 24.04Ubuntu 22.04Ubuntu 22.04KVMPassthrough—RHEL 9.4Ubuntu 22.04SR-IOVGIM 9.1.0.K
+RHEL 9.4Ubuntu 22.04RHEL 9.4See the release notes
+for the full list of supported configurations.
+
+GPU virtualization support#Supported SR-IOV configurations require the GPU-IOV Module (GIM) driver
+9.1.0.K – see the AMD Instinct Virtualization Driver documentation to
+get started.
+HypervisorVirtualization technologyVirtualization driverHost OSGuest OSKVMPassthrough—Ubuntu 24.04Ubuntu 24.04KVMSR-IOVGIM 9.1.0.K
+Ubuntu 24.04Ubuntu 24.04See the release notes
+for the full list of supported configurations.
+
+AI ecosystem compatibility#
+ROCm 7.14.0 provides optimized support for popular deep learning
+frameworks and AI inference engines. The following table lists supported
+frameworks and libraries, their validated versions, and compatible Python
+versions.
+FrameworkSupported versionsPython versionsPyTorch2.12.0, 2.11.0, 2.10.02.12.0, 2.11.03.14, 3.13, 3.12, 3.11PyTorch2.12.03.14, 3.13, 3.12, 3.11JAX0.10.0, 0.9.13.14, 3.13, 3.12, 3.11vLLM0.233.14 (requires PyTorch 2.11.0)SGLang0.5.133.14 (requires PyTorch 2.11.0)MIGraphX2.163.12ONNX Runtime1.23.23.12
+
+previous
+What is ROCm?
+
+next
+Install AMD ROCm 7.14.0
+
+  Installation environment
+
+  Contents
+
+ so the DOM is not blocked -->
+
+Terms and Conditions
+ROCm Licenses and Disclaimers
+Privacy
+Trademarks
+Supply Chain Transparency
+Fair and Open Competition
+UK Tax Strategy
+Cookie Policy
+
+Cookie Settings
+
+© 2026 Advanced Micro Devices, Inc
+
+    
+ -->

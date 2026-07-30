@@ -1,0 +1,1016 @@
+rocBLAS precision support &#8212; rocBLAS 5.5.0 Documentation
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  
+  
+  
+
+  
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+  
+  
+  
+  
+
+  
+  
+  Skip to main content
+  
+  
+  
+  
+    Back to top
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+
+  
+  
+  Ctrl+K
+
+  
+
+  
+  
+
+  
+    
+        
+            
+                
+                    
+                        
+                            
+                                
+                                
+                                
+                            
+                        
+                        
+                            
+                        
+                        
+                        
+        
+    
+    ROCm&#8482; Core SDK 7.14.0
+                    
+                    Version List
+                
+                
+            
+        
+        
+        
+            
+                
+                    
+                    
+                        
+                            
+                            
+                                
+                                    Core SDK
+                                
+                            
+                            
+                            
+                                
+                                    AI Ecosystem
+                                
+                            
+                            
+                            
+                                
+                                    GPU Systems and Infrastructure
+                                
+                            
+                            
+                            
+                                
+                                    Toolkits
+                                    
+                                        
+                                            AMD Data Science
+                                        
+                                            AMD Finance
+                                        
+                                            AMD Life Science
+                                        
+                                            AMD LLM Extension
+                                        
+                                            AMD Simulation
+                                        
+                                    
+                                
+                            
+                            
+                        
+                        
+                        
+                            
+                            
+                                
+                                    Blogs
+                                
+                            
+                            
+                            
+                                
+                                    Developer Hub
+                                
+                            
+                            
+                        
+                    
+                    
+                
+            
+        
+        
+    
+    
+
+  
+    
+      
+      
+      
+      
+        
+
+  
+  
+    
+    
+      
+        
+          
+          
+            
+
+    ROCm Core SDK
+
+          
+        
+      
+    
+    
+    
+  
+  
+    
+        
+
+  
+    
+  
+
+  
+  
+  
+  
+  
+  
+    rocBLAS 5.5.0 Documentation
+  
+
+        
+
+ 
+        
+    
+        
+What is rocBLAS?
+
+Install
+
+Install rocBLAS
+Build rocBLAS on Linux
+Build rocBLAS on Windows
+
+Conceptual
+
+rocBLAS design notes
+BLAS operations introduction
+
+How to
+
+Program with rocBLAS
+Use logging with rocBLAS
+
+Examples
+
+rocBLAS sample code
+
+API Reference
+
+rocBLAS precision support
+Environment variables
+API Reference
+rocBLAS datatypes
+rocBLAS enumeration
+rocBLAS helper functions
+rocBLAS Level-1 functions
+rocBLAS Level-2 functions
+rocBLAS Level-3 functions
+rocBLAS extension
+rocBLAS beta features
+Device memory allocation in rocBLAS
+rocBLAS deprecations by version
+
+About
+
+rocBLAS license
+References
+Acknowledgements
+Contribute to rocBLAS
+
+    
+
+    
+  
+  
+  
+  
+  
+  
+
+      
+      
+      
+        
+        
+
+          
+            
+              
+              
+
+  
+    
+      
+        
+    
+  
+      
+        
+
+  
+    
+    
+      
+        
+      
+    
+    rocBLAS...
+  
+
+      
+    
+  
+  
+    
+      
+        
+
+    
+
+      
+    
+  
+
+              
+              
+
+    rocBLAS precision support
+    
+    
+        
+            
+            
+                 Contents 
+            
+            
+                
+Supported data types overview
+Functions data type support
+Level 1 functions - vector operations
+Level 2 functions - matrix-vector operations
+Level 3 functions - matrix-matrix operations
+Extensions
+
+            
+        
+    
+
+              
+                
+
+                
+                  
+  
+rocBLAS precision support#
+This topic lists the data type support for the rocBLAS library on AMD GPUs for
+different levels of BLAS operations Level 1,
+2, and 3.
+The rocBLAS library functions are also available with ILP64 interfaces. With
+these interfaces, all rocblas_int arguments are replaced by the type name
+int64_t. For more information on these _64 functions, see the
+ILP64 interface section.
+This page lists the data types supported by the library itself and does not
+indicate hardware support. A type listed here is only usable if the GPU
+architecture also supports it; otherwise it is unsupported. For data type support
+across the other ROCm libraries and by GPU architecture, see the
+Data types and precision support page.
+
+Supported data types overview#
+The following table summarizes the input and output data types supported by
+rocBLAS. For per-function support details, see the operation-level tables in the
+following sections.
+
+Icon
+Definition
+
+✅
+Fully supported as both an input and output type.
+
+⚠️
+Partially supported as an input or output type.
+
+Data types not listed in the table below are not supported.
+
+Data type
+Support
+
+int8
+⚠️
+
+int32
+⚠️
+
+float16
+⚠️
+
+bfloat16
+⚠️
+
+float32
+✅
+
+float64
+✅
+
+cfloat32
+✅
+
+cfloat64
+✅
+
+Functions data type support#
+The following sections list the per-function data type support for each level of
+BLAS operation. The icons representing different levels of support are explained
+in the following table.
+
+Icon
+Definition
+
+NA
+Not applicable
+
+❌
+Not supported
+
+⚠️
+Partial support
+
+✅
+Full support
+
+Level 1 functions - vector operations#
+Level-1 functions perform scalar, vector, and vector-vector operations.
+
+Float types
+
+Function
+Description
+float16
+bfloat16
+float
+double
+
+AMax, AMin, ASum
+Finds the first index of the element of minimum or maximum magnitude of a vector x or computes the sum of the magnitudes of elements of a real vector x.
+❌
+❌
+✅
+✅
+
+AXPY
+Scales a vector and adds it to another: \(y = \alpha x + y\)
+✅
+❌
+✅
+✅
+
+Copy
+Copies vector x to y: \(y = x\)
+❌
+❌
+✅
+✅
+
+Dot
+Computes the dot product: \(result = x^T y\)
+✅
+✅
+✅
+✅
+
+NRM2
+Computes the Euclidean norm of a vector.
+❌
+❌
+✅
+✅
+
+Rot, Rotg
+Applies and generates a Givens rotation matrix.
+❌
+❌
+✅
+✅
+
+Rotm, Rotmg
+Applies and generates a modified Givens rotation matrix.
+❌
+❌
+✅
+✅
+
+Scal
+Scales a vector by a scalar: \(x = \alpha x\)
+❌
+❌
+✅
+✅
+
+Swap
+Swaps corresponding elements of two vectors x and y: \(x_i \leftrightarrow y_i \quad \text{for} \quad i = 0, 1, 2, \ldots, n - 1\)
+❌
+❌
+✅
+✅
+
+Complex types
+
+Function
+Description
+complex
+double complex
+
+AMax, AMin, ASum
+Finds the first index of the element of minimum or maximum magnitude of a vector x or computes the sum of the magnitudes of elements of a real vector x.
+✅
+✅
+
+AXPY
+Scales a vector and adds it to another: \(y = \alpha x + y\)
+✅
+✅
+
+Copy
+Copies vector x to y: \(y = x\)
+✅
+✅
+
+Dot
+Computes the dot product: \(result = x^T y\)
+✅
+✅
+
+NRM2
+Computes the Euclidean norm of a vector.
+✅
+✅
+
+Rot, Rotg
+Applies and generates a Givens rotation matrix.
+✅
+✅
+
+Rotm, Rotmg
+Applies and generates a modified Givens rotation matrix.
+❌
+❌
+
+Scal
+Scales a vector by a scalar: \(x = \alpha x\)
+✅
+✅
+
+Swap
+Swaps corresponding elements of two vectors x and y: \(x_i \leftrightarrow y_i \quad \text{for} \quad i = 0, 1, 2, \ldots, n - 1\)
+✅
+✅
+
+Level 2 functions - matrix-vector operations#
+Level-2 functions perform matrix-vector operations.
+
+Float types
+
+Function
+Description
+float16
+bfloat16
+float
+double
+
+GBMV
+General band matrix-vector multiplication: \(y = \alpha A x + \beta y\)
+❌
+❌
+✅
+✅
+
+GEMV
+General matrix-vector multiplication: \(y = \alpha A x + \beta y\)
+⚠️ [1]
+⚠️ [1]
+✅
+✅
+
+GER
+Generalized rank-1 update: \(A = \alpha x y^T + A\)
+❌
+❌
+✅
+✅
+
+GERU and GERC
+Generalized rank-1 update for unconjugated or conjugated complex numbers: \(A = \alpha x y^T + A\)
+❌
+❌
+❌
+❌
+
+SBMV, SPMV
+Symmetric Band matrix-vector multiplication: \(y = \alpha A x + \beta y\)
+❌
+❌
+✅
+✅
+
+SPR
+Symmetric packed rank-1 update.
+❌
+❌
+✅
+✅
+
+SPR2
+Symmetric packed rank-2 update.
+❌
+❌
+✅
+✅
+
+SYMV
+Symmetric matrix-vector multiplication: \(y = \alpha A x + \beta y\)
+❌
+❌
+✅
+✅
+
+SYR, SYR2
+Symmetric matrix rank-1 or rank-2 update.
+❌
+❌
+✅
+✅
+
+TBMV, TBSV
+Triangular band matrix-vector multiplication, triangular band solve.
+❌
+❌
+✅
+✅
+
+TPMV, TPSV
+Triangular packed matrix-vector multiplication, triangular packed solve.
+❌
+❌
+✅
+✅
+
+TRMV, TRSV
+Triangular matrix-vector multiplication, triangular solve.
+❌
+❌
+✅
+✅
+
+HEMV, HBMV, HPMV
+Hermitian matrix-vector multiplication.
+NA
+NA
+NA
+NA
+
+HER, HER2
+Hermitian rank-1 and rank-2 update.
+NA
+NA
+NA
+NA
+
+HPR, HPR2
+Hermitian packed rank-1 and rank-2 update of packed.
+NA
+NA
+NA
+NA
+
+Complex types
+
+Function
+Description
+complex
+double complex
+
+GBMV
+General band matrix-vector multiplication: \(y = \alpha A x + \beta y\)
+✅
+✅
+
+GEMV
+General matrix-vector multiplication: \(y = \alpha A x + \beta y\)
+✅
+✅
+
+GER
+Generalized rank-1 update: \(A = \alpha x y^T + A\)
+❌
+❌
+
+GERU and GERC
+Generalized rank-1 update for unconjugated or conjugated complex numbers: \(A = \alpha x y^T + A\)
+✅
+✅
+
+SBMV, SPMV
+Symmetric Band matrix-vector multiplication: \(y = \alpha A x + \beta y\)
+❌
+❌
+
+SPR
+Symmetric packed rank-1 update.
+✅
+✅
+
+SPR2
+Symmetric packed rank-2 update.
+❌
+❌
+
+SYMV
+Symmetric matrix-vector multiplication: \(y = \alpha A x + \beta y\)
+✅
+✅
+
+SYR, SYR2
+Symmetric matrix rank-1 or rank-2 update.
+✅
+✅
+
+TBMV, TBSV
+Triangular band matrix-vector multiplication, triangular band solve.
+✅
+✅
+
+TPMV, TPSV
+Triangular packed matrix-vector multiplication, triangular packed solve.
+✅
+✅
+
+TRMV, TRSV
+Triangular matrix-vector multiplication, triangular solve.
+✅
+✅
+
+HEMV, HBMV, HPMV
+Hermitian matrix-vector multiplication.
+✅
+✅
+
+HER, HER2
+Hermitian rank-1 and rank-2 update.
+✅
+✅
+
+HPR, HPR2
+Hermitian packed rank-1 and rank-2 update.
+✅
+✅
+
+Level 3 functions - matrix-matrix operations#
+Level-3 functions perform matrix-matrix operations. rocBLAS calls the AMD
+Tensile and hipBLASLt
+libraries for Level-3 GEMMs (matrix matrix multiplication).
+
+Float types
+
+Function
+Description
+float16
+bfloat16
+float
+double
+
+GEMM
+General matrix-matrix multiplication: \(C = \alpha A B + \beta C\)
+✅
+❌
+✅
+✅
+
+SYMM
+Symmetric matrix-matrix multiplication: \(C = \alpha A B + \beta C\)
+❌
+❌
+✅
+✅
+
+SYRK, SYR2K
+Update symmetric matrix with one matrix product or by using two matrices.
+❌
+❌
+✅
+✅
+
+SYRKX
+SYRKX adds an extra matrix multiplication step before updating the symmetric matrix.
+❌
+❌
+✅
+✅
+
+TRMM
+Triangular matrix-matrix multiplication.
+❌
+❌
+✅
+✅
+
+TRSM
+Triangular solve with multiple right-hand sides.
+❌
+❌
+✅
+✅
+
+HEMM
+Hermitian matrix-matrix multiplication.
+NA
+NA
+NA
+NA
+
+HERK, HER2K
+Update Hermitian matrix with one matrix product or by using two matrices.
+NA
+NA
+NA
+NA
+
+HERKX
+HERKX adds an extra matrix multiplication step before updating the Hermitian matrix.
+NA
+NA
+NA
+NA
+
+TRTRI
+Triangular matrix inversion.
+❌
+❌
+✅
+✅
+
+Complex types
+
+Function
+Description
+complex
+double complex
+
+GEMM
+General matrix-matrix multiplication: \(C = \alpha A B + \beta C\)
+✅
+✅
+
+SYMM
+Symmetric matrix-matrix multiplication: \(C = \alpha A B + \beta C\)
+✅
+✅
+
+SYRK, SYR2K
+Update symmetric matrix with one matrix product or by using two matrices.
+✅
+✅
+
+SYRKX
+SYRKX adds an extra matrix multiplication step before updating the symmetric matrix.
+✅
+✅
+
+TRMM
+Triangular matrix-matrix multiplication.
+✅
+✅
+
+TRSM
+Triangular solve with multiple right-hand sides.
+✅
+✅
+
+HEMM
+Hermitian matrix-matrix multiplication.
+✅
+✅
+
+HERK, HER2K
+Update Hermitian matrix with one matrix product or by using two matrices.
+✅
+✅
+
+HERKX
+HERKX adds an extra matrix multiplication step before updating the Hermitian matrix.
+✅
+✅
+
+TRTRI
+Triangular matrix inversion.
+❌
+❌
+
+Extensions#
+The extension function data type support is listed for every function separately
+on the Extensions reference page.
+Footnotes
+
+[1]
+(1,2)
+Only the batched and strided batched GEMV functions support the half and bfloat16 types.
+
+                
+              
+
+              
+              
+              
+              
+                
+                  
+
+    
+      
+      
+        previous
+        rocBLAS logging
+      
+    
+    
+      
+        next
+        Environment variables
+      
+      
+    
+
+                
+              
+            
+            
+            
+    
+        
+              
+                
+
+  
+  
+     Contents
+  
+  
+    
+Supported data types overview
+Functions data type support
+Level 1 functions - vector operations
+Level 2 functions - matrix-vector operations
+Level 3 functions - matrix-matrix operations
+Extensions
+
+  
+
+              
+            
+    
+
+          
+          
+            
+  
+          
+        
+
+      
+    
+  
+  
+   so the DOM is not blocked -->
+  
+
+    
+
+    
+        
+            
+                
+                    
+                        Terms and Conditions
+                        ROCm Licenses and Disclaimers
+                        Privacy
+                        Trademarks
+                        Supply Chain Transparency
+                        Fair and Open Competition
+                        UK Tax Strategy
+                        Cookie Policy
+                        
+                        Cookie Settings
+                        
+                    
+                
+            
+            
+                
+                    
+                        © 2026 Advanced Micro Devices, Inc
+                    
+                
+            
+        
+    
+
+    
+ -->
