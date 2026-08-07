@@ -98,8 +98,4 @@
 
 ---
 
-<div align="center">
-
-**EDGE AI · AGENT + LLM · INFERENCE INFRA**
-
-</div>
+<p align="center"><strong>EDGE AI · AGENT + LLM · INFERENCE INFRA</strong></p>
