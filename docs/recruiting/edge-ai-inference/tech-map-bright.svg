@@ -40,8 +40,8 @@
   </g>
 
   <g transform="translate(446 190)">
-    <rect width="338" height="245" rx="20" fill="#15517f" stroke="#63c7ed"/>
-    <rect x="0" y="0" width="338" height="5" rx="3" fill="#36c6ff" filter="url(#glow)"/>
+    <rect width="338" height="245" rx="20" fill="#176493" stroke="#b5f5ff" stroke-width="2.5"/>
+    <rect x="0" y="0" width="338" height="7" rx="3" fill="#7be9ff" filter="url(#glow)"/>
     <text class="cn num" x="26" y="45">02 · INFRA</text>
     <text class="cn cardTitle" x="26" y="88">推理系统深度优化</text>
     <text class="cn body" x="26" y="132"><tspan x="26">vLLM · SGLang · Runtime</tspan><tspan x="26" dy="34">调度 · 内存 · 异构计算</tspan><tspan x="26" dy="34">低延迟与高吞吐</tspan></text>

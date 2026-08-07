@@ -28,7 +28,7 @@
   </g>
   <g transform="translate(476 178)">
     <circle cx="92" cy="69" r="39" fill="#60d0ff"/><text class="cn num" x="92" y="77" text-anchor="middle">02</text>
-    <rect x="0" y="121" width="270" height="156" rx="18" fill="#164f7b" stroke="#65ccee"/>
+    <rect x="0" y="121" width="270" height="156" rx="18" fill="#176493" stroke="#b5f5ff" stroke-width="2.5"/>
     <text class="cn ct" x="24" y="164">框架实战</text>
     <text class="cn body" x="24" y="202"><tspan x="24">从 vLLM / SGLang</tspan><tspan x="24" dy="29">等主流框架切入</tspan></text>
   </g>
