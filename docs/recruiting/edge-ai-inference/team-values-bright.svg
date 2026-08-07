@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="620" viewBox="0 0 1600 620">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b3158"/><stop offset="1" stop-color="#174f7f"/></linearGradient>
+    <linearGradient id="tag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#48ddff"/><stop offset="1" stop-color="#75a9ff"/></linearGradient>
+    <style>
+      .cn{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif}.title{font-size:40px;font-weight:750;fill:#f6fbff}.sub{font-size:20px;fill:#c6def1}
+      .n{font-size:17px;font-weight:850;fill:#0a3151}.ct{font-size:23px;font-weight:720;fill:#f7fbff}.body{font-size:16px;fill:#c8deef}
+    </style>
+  </defs>
+  <rect width="1600" height="620" rx="28" fill="url(#bg)"/>
+  <circle cx="1520" cy="560" r="250" fill="#7665d8" opacity=".20"/><circle cx="30" cy="40" r="180" fill="#44cfff" opacity=".10"/>
+  <text class="cn title" x="74" y="78">加入团队，你会获得什么</text>
+  <text class="cn sub" x="74" y="116">前沿方向、真实项目、完整成长路径，以及可持续的工作节奏</text>
+
+  <g transform="translate(74 166)"><rect width="458" height="170" rx="18" fill="#17517e" stroke="#5bc8ef"/><rect x="24" y="24" width="44" height="36" rx="9" fill="url(#tag)"/><text class="cn n" x="46" y="48" text-anchor="middle">01</text><text class="cn ct" x="24" y="97">AI Infra 主航道</text><text class="cn body" x="24" y="132"><tspan x="24">参与大模型推理、Agent 系统与边端智能</tspan><tspan x="24" dy="27">等前沿方向建设</tspan></text></g>
+  <g transform="translate(571 166)"><rect width="458" height="170" rx="18" fill="#17517e" stroke="#5bc8ef"/><rect x="24" y="24" width="44" height="36" rx="9" fill="url(#tag)"/><text class="cn n" x="46" y="48" text-anchor="middle">02</text><text class="cn ct" x="24" y="97">全链路技术成长</text><text class="cn body" x="24" y="132"><tspan x="24">从应用负载、Runtime 一路深入</tspan><tspan x="24" dy="27">系统优化、Kernel 与芯片</tspan></text></g>
+  <g transform="translate(1068 166)"><rect width="458" height="170" rx="18" fill="#17517e" stroke="#5bc8ef"/><rect x="24" y="24" width="44" height="36" rx="9" fill="url(#tag)"/><text class="cn n" x="46" y="48" text-anchor="middle">03</text><text class="cn ct" x="24" y="97">真实技术闭环</text><text class="cn body" x="24" y="132"><tspan x="24">在真实硬件与 Agent 场景中验证结果</tspan><tspan x="24" dy="27">让性能优化转化为产品体验</tspan></text></g>
+
+  <g transform="translate(74 368)"><rect width="458" height="170" rx="18" fill="#17517e" stroke="#5bc8ef"/><rect x="24" y="24" width="44" height="36" rx="9" fill="url(#tag)"/><text class="cn n" x="46" y="48" text-anchor="middle">04</text><text class="cn ct" x="24" y="97">新方向共建机会</text><text class="cn body" x="24" y="132"><tspan x="24">参与技术路线、工程体系</tspan><tspan x="24" dy="27">与项目方向的共同建设</tspan></text></g>
+  <g transform="translate(571 368)"><rect width="458" height="170" rx="18" fill="#17517e" stroke="#5bc8ef"/><rect x="24" y="24" width="44" height="36" rx="9" fill="url(#tag)"/><text class="cn n" x="46" y="48" text-anchor="middle">05</text><text class="cn ct" x="24" y="97">开放协作氛围</text><text class="cn body" x="24" y="132"><tspan x="24">技术驱动、务实坦诚</tspan><tspan x="24" dy="27">鼓励分享交流与跨领域合作</tspan></text></g>
+  <g transform="translate(1068 368)"><rect width="458" height="170" rx="18" fill="#284b84" stroke="#a493ff"/><rect x="24" y="24" width="44" height="36" rx="9" fill="#a493ff"/><text class="cn n" x="46" y="48" text-anchor="middle">06</text><text class="cn ct" x="24" y="97">Work-life balance</text><text class="cn body" x="24" y="132"><tspan x="24">重视长期成长和高质量产出</tspan><tspan x="24" dy="27">也认真对待可持续的工作节奏</tspan></text></g>
+</svg>
